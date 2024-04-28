@@ -1,0 +1,7 @@
+.direnv
+.venv
+
+*.pyc
+__pycache__/
+
+*.csv

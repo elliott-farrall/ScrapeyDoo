@@ -23,13 +23,11 @@
       {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            inotify-tools
-
-            openssl
-            (uwsgi.override { plugins = [ "python3" ]; })
+            firefox
+            geckodriver
 
             poetry
-            python3
+            python3Full
           ];
           
           LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
