@@ -19,9 +19,11 @@ jobs:
         python-version: 3.9
 
     - name: Install Poetry
-      run: |
-        (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
-
+      uses: snok/install-poetry@v1.1.6
+      with:
+        virtualenvs-create: false
+        virtualenvs-in-project: false
+    
     - name: Install dependencies
       run: |
         poetry install --no-root
