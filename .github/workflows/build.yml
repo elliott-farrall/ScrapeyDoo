@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        shell: bass
+        shell: bash
     permissions:
       contents: write
 
