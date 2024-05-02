@@ -7,6 +7,16 @@
     },
     "tasks": [
         {
+            "label": "Compile App",
+            "type": "shell",
+            "command": "nix develop --command bash -c 'poetry run python compile.py'",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
             "label": "Install Module from Selection",
             "type": "shell",
             "command": "nix develop --command bash -c  'poetry add ${selectedText}'"

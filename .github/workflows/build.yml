@@ -1,0 +1,57 @@
+name: Build and Test (Windows)
+
+on:
+  push:
+    branches: [ scrapy ]
+  pull_request:
+    branches: [ scrapy ]
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install Poetry
+      run: |
+        (Invoke-WebRequest -Uri https://install.python-poetry.org/windows-installer.py -UseBasicParsing).Content | python -
+
+    - name: Install dependencies
+      run: |
+        poetry install --no-root
+
+    - name: Run compile.py
+      run: |
+        python compile.py
+
+    - name: Test .exe
+      run: |
+        .\ScrapeyDoo_Windows.exe
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+  
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./ScrapeyDoo_Windows.exe
+        asset_name: ScrapeyDoo_Windows.exe
+        asset_content_type: application/octet-stream

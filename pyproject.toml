@@ -6,14 +6,15 @@ authors = ["ElliottSullingeFarrall <elliott.chalford@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9"
-requests = "^2.31.0"
-bs4 = "^0.0.2"
-lxml = "^5.2.1"
-pandas = "^2.2.2"
+python = ">=3.9,<3.13"
 selenium = "^4.20.0"
 xvfbwrapper = "^0.2.9"
+scrapy = "^2.11.1"
+scrapy-user-agents = "^0.1.1"
+scrapy-proxies = "^0.4"
 
+[tool.poetry.group.dev.dependencies]
+pyinstaller = "^6.6.0"
 
 [build-system]
 requires = ["poetry-core"]

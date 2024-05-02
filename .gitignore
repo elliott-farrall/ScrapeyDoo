@@ -4,4 +4,11 @@
 *.pyc
 __pycache__/
 
+*.log
 *.csv
+
+build/
+*.spec
+
+dist/
+result
