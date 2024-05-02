@@ -44,6 +44,7 @@ jobs:
       - name: Test .exe
         run: |
           .\ScrapeyDoo_Windows.exe
+        shell: powershell
 
       - name: Create Release
         id: create_release

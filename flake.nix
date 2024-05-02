@@ -23,9 +23,7 @@
       {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            firefox
-            geckodriver
-
+            act
             poetry
             python3Full
           ];
