@@ -12,7 +12,7 @@ def compile():
             f'--windowed',
             f'--argv-emulation',
             f'--name=ScrapeyDoo_{platform.system()}',
-            f'-i=assets/Scrapey-Doo.ico',
+            # f'-i=assets/Scrapey-Doo.ico',
             # f'--add-data=assets/Scrappy-Doo.webp{os.pathsep}assets',
             # f'--hidden-import=babel.numbers',
             f'--noconfirm'
