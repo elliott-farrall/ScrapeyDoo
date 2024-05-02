@@ -43,7 +43,7 @@ jobs:
 
       - name: Test .exe
         run: |
-          .\build\ScrapeyDoo_Windows.exe
+          .\dist\ScrapeyDoo_Windows.exe
         shell: powershell
 
       - name: Create Release
