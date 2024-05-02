@@ -40,15 +40,10 @@ jobs:
       - name: Run compile.py
         run: |
             poetry run python compile.py
-      
-      - name: List files in current directory
-        run: |
-          Get-ChildItem -Path . -File
-        shell: powershell
 
       - name: Test .exe
         run: |
-          .\ScrapeyDoo_Windows.exe
+          .\build\ScrapeyDoo_Windows.exe
         shell: powershell
 
       - name: Create Release
