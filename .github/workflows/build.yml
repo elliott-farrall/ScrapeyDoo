@@ -2,16 +2,17 @@ name: Build and Test (Windows)
 
 on:
   push:
-    branches: [ scrapy ]
-  pull_request:
-    branches: [ scrapy ]
+    tags:
+      - '*'
 
 jobs:
   build-and-test:
     runs-on: windows-latest
     defaults:
       run:
-        shell: bash
+        shell: bass
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -49,5 +50,4 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1.14.0
         with:
-          tag: ${{ github.ref }}
           artifacts: "dist/*"
