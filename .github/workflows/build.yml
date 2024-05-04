@@ -30,6 +30,7 @@ jobs:
       - name: List Directory Structure
         run: |
           dir /s
+        shell: powershell
 
       - name: Build Executable
         uses: sayyid5416/pyinstaller@v1.2.0
