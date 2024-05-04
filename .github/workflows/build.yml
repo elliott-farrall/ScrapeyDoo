@@ -31,8 +31,9 @@ jobs:
 
       - name: Test Executable
         run: |
+          $query = Get-Content -Path tests\query.json -Raw
           .\dist\ScrapeyDoo.exe
-          .\dist\ScrapeyDoo.exe tests\query.json
+          .\dist\ScrapeyDoo.exe $query
         shell: powershell
 
       - name: Create Release
