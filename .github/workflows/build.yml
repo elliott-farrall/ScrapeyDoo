@@ -32,6 +32,7 @@ jobs:
       - name: Test Executable
         run: |
           $query = Get-Content -Path tests\query.json -Raw
+          Write-Output "Query: $query"
           .\dist\ScrapeyDoo.exe
           .\dist\ScrapeyDoo.exe $query
         shell: powershell
