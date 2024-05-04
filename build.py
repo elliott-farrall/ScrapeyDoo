@@ -4,7 +4,7 @@ import glob
 import shutil
 import platform
 
-def compile():   
+def build():   
     try:
         compiler.run([
             f'src/__init__.py',
@@ -33,4 +33,4 @@ def compile():
         shutil.rmtree('build')
 
 if __name__ == '__main__':
-    compile()
+    build()
