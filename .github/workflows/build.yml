@@ -31,8 +31,9 @@ jobs:
 
       - name: Test Executable
         run: |
-          ./dist/ScrapeyDoo.exe
-          ./dist/ScrappyDoo.exe tests/query.json
+          .\dist\ScrapeyDoo.exe
+          .\dist\ScrapeyDoo.exe tests\query.json
+        shell: powershell
 
       - name: Create Release
         uses: ncipollo/release-action@v1.14.0
