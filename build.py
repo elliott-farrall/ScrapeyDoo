@@ -27,8 +27,8 @@ def build():
     except KeyError:
         print(f'The platform: {platform.system()} is not supported!')
 
-    # for spec_file in glob.glob('*.spec'):
-    #     os.remove(spec_file)
+    for spec_file in glob.glob('*.spec'):
+        os.remove(spec_file)
     if os.path.exists('build'):
         shutil.rmtree('build')
 

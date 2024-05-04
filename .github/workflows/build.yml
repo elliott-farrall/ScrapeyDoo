@@ -16,7 +16,8 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Setup Environment
         uses: packetcoders/action-setup-cache-python-poetry@v1.2.0
@@ -24,25 +25,14 @@ jobs:
           python-version: 3.9
           poetry-version: 1.7.1
 
-      - name: List Dependencies
-        uses: divideprojects/poetry-export-requirements-action@v1.4.0
-
-      - name: List Directory Structure
-        run: |
-          Get-ChildItem -Path . -Recurse
-        shell: powershell
-
       - name: Build Executable
-        uses: sayyid5416/pyinstaller@v1.2.0
-        with:
-          python_ver: '3.9'
-          spec: 'ScrapeyDoo.spec'
-          requirements: 'requirements.txt'
+        run: |
+          poetry run python build.py
 
       - name: Test Executable
         run: |
-          .\dist\ScrapeyDoo.exe
-        shell: powershell
+          ./dist/ScrapeyDoo.exe
+          ./dist/ScrappyDoo.exe tests/query.json
 
       - name: Create Release
         uses: ncipollo/release-action@v1.14.0
