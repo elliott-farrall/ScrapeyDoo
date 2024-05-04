@@ -19,8 +19,10 @@ else:
     app_dir = os.path.dirname(os.path.abspath(__file__))
 
 if os.path.exists("ScrapeyDoo.log"):
-            os.remove("ScrapeyDoo.log")
-if not os.path.exists("scraps"):
+    os.remove("ScrapeyDoo.log")
+if not os.path.isdir("scraps"):
+    if os.path.exists("scraps"):
+        os.remove("scraps")
     os.mkdir("scraps")
 
 # ------------------------------- Kill Process ------------------------------- #
