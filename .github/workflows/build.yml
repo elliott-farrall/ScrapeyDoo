@@ -27,6 +27,10 @@ jobs:
       - name: List Dependencies
         uses: divideprojects/poetry-export-requirements-action@v1.4.0
 
+      - name: List Directory Structure
+        run: |
+          dir /s
+
       - name: Build Executable
         uses: sayyid5416/pyinstaller@v1.2.0
         with:
