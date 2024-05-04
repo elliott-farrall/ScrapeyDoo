@@ -8,7 +8,5 @@ __pycache__/
 *.csv
 
 build/
-*.spec
-
 dist/
 result

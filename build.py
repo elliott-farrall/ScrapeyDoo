@@ -13,7 +13,7 @@ def build():
             f'--argv-emulation',
 
             f'--name=ScrapeyDoo',
-            f'-i=src/assets/ScrapeyDoo.ico',
+            f'--icon=src/assets/ScrapeyDoo.ico',
             f'--add-data=src/assets{os.pathsep}assets',
 
             f'--paths=src',
@@ -27,8 +27,8 @@ def build():
     except KeyError:
         print(f'The platform: {platform.system()} is not supported!')
 
-    for spec_file in glob.glob('*.spec'):
-        os.remove(spec_file)
+    # for spec_file in glob.glob('*.spec'):
+    #     os.remove(spec_file)
     if os.path.exists('build'):
         shutil.rmtree('build')
 

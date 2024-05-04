@@ -1,4 +1,4 @@
-name: Build and Test (Windows)
+name: Build
 
 on:
   push:
@@ -6,8 +6,9 @@ on:
       - '*'
 
 jobs:
-  build-and-test:
+  build-windows:
     runs-on: windows-latest
+
     defaults:
       run:
         shell: bash
@@ -16,35 +17,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        id: setup-python
-        with:
-          python-version: '3.9'
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1.3.4
+      - name: Setup Environment
+        uses: packetcoders/action-setup-cache-python-poetry@v1.2.0
         with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-    
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
+          python-version: 3.9
+          poetry-version: 1.7.1
+
+      - name: List Dependencies
+        uses: divideprojects/poetry-export-requirements-action@v1.4.0
+
+      - name: Build Executable
+        uses: sayyid5416/pyinstaller@v1.2.0
         with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          python_ver: '3.9'
+          spec: 'ScrapeyDoo.spec'
+          requirements: 'requirements.txt'
 
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-
-      - name: Run compile.py
+      - name: Test Executable
         run: |
-            poetry run python compile.py
-
-      - name: Test .exe
-        run: |
-          .\dist\ScrapeyDoo_Windows.exe
+          .\dist\ScrapeyDoo.exe
         shell: powershell
 
       - name: Create Release
