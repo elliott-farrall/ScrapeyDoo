@@ -1,5 +1,9 @@
 from scrapy import Spider, Request
 
+# ---------------------------------------------------------------------------- #
+#                                Product Spider                                #
+# ---------------------------------------------------------------------------- #
+
 class ProductSpider(Spider):
     name = 'product-spider'
 

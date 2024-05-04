@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 import atexit
+import psutil
 import os
 import sys
 import json
@@ -9,8 +10,37 @@ import json
 from subprocess import Popen
 
 # ---------------------------------------------------------------------------- #
+#                                     Setup                                    #
+# ---------------------------------------------------------------------------- #
+
+if getattr(sys, 'frozen', False):
+    app_dir = sys._MEIPASS
+else:
+    app_dir = os.path.dirname(os.path.abspath(__file__))
+
+if os.path.exists("ScrapeyDoo.log"):
+            os.remove("ScrapeyDoo.log")
+if not os.path.exists("scraps"):
+    os.mkdir("scraps")
+
+# ------------------------------- Kill Process ------------------------------- #
+
+def kill(subprocess):
+    try:
+        process = psutil.Process(subprocess.pid)
+        for proc in process.children(recursive=True):
+            proc.kill()
+        process.kill()
+    except psutil.NoSuchProcess:
+        pass
+
+# ---------------------------------------------------------------------------- #
 #                                     Main                                     #
 # ---------------------------------------------------------------------------- #
+
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
+from spiders.results_spider import ResultsSpider
 
 class App(tk.Tk):
     def __init__(self):
@@ -199,7 +229,8 @@ class App(tk.Tk):
 
         # ------------------------------ Window Settings ----------------------------- #
 
-        self.title("ScrapeyDoor")
+        self.title("ScrapeyDoo")
+        self.iconbitmap(os.path.join(app_dir, "assets/ScrapeyDoo.ico"))
         self.style = ttk.Style()
         self.style.theme_use('clam')
 
@@ -222,22 +253,81 @@ class App(tk.Tk):
             'p_47': self.year_entry.get(),
             'sort': self.sort_results_by_entry.get(),
         }
-        self.scrapes.append(Popen([sys.executable, "scraper.py", json.dumps(query)]))
+        if getattr(sys, 'frozen', False):
+            self.scrapes.append(Popen([sys.executable, json.dumps(query)]))
+        else:
+            self.scrapes.append(Popen([sys.executable, __file__, json.dumps(query)]))
 
     def exit(self):
         for scrape in self.scrapes:
-            scrape.kill()
+            kill(scrape)
         os._exit(0)
+
+class Scraper(tk.Tk):
+    def __init__(self, query):
+        super().__init__()
+        self.draw()
+        self.update()
+
+        self.protocol("WM_DELETE_WINDOW", self.exit)
+        atexit.register(self.exit)
+
+        os.environ.setdefault('SCRAPY_SETTINGS_MODULE', 'settings')
+        self.process = CrawlerProcess(get_project_settings())
+        self.process.crawl(ResultsSpider, query=query, progress_bar=self.progress_bar)
+        self.process.start()
+
+        self.destroy()
+
+    def draw(self):
+        self.progress_bar = Progress(self, colour='green')
+        self.progress_bar.grid(row=0, column=0)
+
+        self.cancel_button = ttk.Button(text="Cancel", command=self.exit)
+        self.cancel_button.grid(row=1, column=0)
+
+        self.title("ScrapeyDoo")
+        self.iconbitmap(os.path.join(app_dir, "assets/ScrapeyDoo.ico"))
+        self.style = ttk.Style()
+        self.style.theme_use('clam')
+
+        self.geometry("")
+        self.resizable(False, False)
+
+    def exit(self):
+        os._exit(0)
+
+class Progress(tk.Text):
+    def __init__(self, master=None, colour='green'):
+        if master is not None:
+            super().__init__(master, state='disabled', height=1)
+        else:
+            super().__init__(state='disabled', height=1)
+        self.tag_config('highlight', background=colour)
+
+    def update(self, value=None, text=None):
+        self.config(state='normal')
+
+        self.delete('1.0', tk.END)
+        if text is not None:
+            self.insert(tk.END, f"{text : ^{self['width']}}")
+        if value is not None:
+            self.tag_add('highlight', '1.0', f"1.{int(value * self['width'])}")
+
+        self.config(state='disabled')
+        self.master.update()
 
 # ---------------------------------------------------------------------------- #
 #                                     Init                                     #
 # ---------------------------------------------------------------------------- #
 
 if __name__ == "__main__":
-    log = "ScrapeyDoo.log"
-    if os.path.exists(log):
-        os.remove(log)
+    if len(sys.argv) == 1:
+        app = App()
+        app.mainloop()
+    else:
+        query = json.loads(sys.argv[1])
 
-    app = App()
-    app.mainloop()
+        scraper = Scraper(query)
+        scraper.mainloop()
 

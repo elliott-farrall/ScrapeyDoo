@@ -1,3 +1,15 @@
+import sys
+import os
+
+if getattr(sys, 'frozen', False):
+    app_dir = sys._MEIPASS
+else:
+    app_dir = os.path.dirname(os.path.abspath(__file__))
+
+# ---------------------------------------------------------------------------- #
+#                                   Settings                                   #
+# ---------------------------------------------------------------------------- #
+
 LOG_LEVEL = 'DEBUG'
 LOG_FILE = 'ScrapeyDoo.log'
 
@@ -20,7 +32,8 @@ DOWNLOADER_MIDDLEWARES = {
 }
 
 RANDOM_UA_TYPE = 'desktop.random'
-RANDOM_UA_PER_PROXY = True
+RANDOM_UA_PER_PROXY = False
+RANDOM_UA_FILE = os.path.join(app_dir, 'resources/user_agents.txt')
 
 PROXY_MODE = 0
-PROXY_LIST = 'proxies.txt'
+PROXY_LIST = os.path.join(app_dir, 'resources/proxies.txt')

@@ -11,10 +11,16 @@ def compile():
             f'--onefile',
             f'--windowed',
             f'--argv-emulation',
-            f'--name=ScrapeyDoo_{platform.system()}',
-            # f'-i=assets/Scrapey-Doo.ico',
-            # f'--add-data=assets/Scrappy-Doo.webp{os.pathsep}assets',
-            # f'--hidden-import=babel.numbers',
+
+            f'--name=ScrapeyDoo',
+            f'-i=src/assets/ScrapeyDoo.ico',
+            f'--add-data=src/assets{os.pathsep}assets',
+
+            f'--paths=src',
+            f'--additional-hooks-dir=src/hooks',
+            f'--hidden-import=settings',
+            f'--add-data=src/resources{os.pathsep}resources',
+
             f'--noconfirm'
         ])
         print('Done!')

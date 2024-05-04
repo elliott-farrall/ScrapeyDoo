@@ -1,16 +1,34 @@
+from datetime import datetime
+import os
+
 from scrapy import Spider, Request, signals
 from spiders.product_spider import ProductSpider
+import scrapy.utils.misc
+import scrapy.core.scraper
 
-from datetime import datetime
+def warn_on_generator_with_return_value_stub(spider, callable):
+    pass
+scrapy.utils.misc.warn_on_generator_with_return_value = warn_on_generator_with_return_value_stub
+scrapy.core.scraper.warn_on_generator_with_return_value = warn_on_generator_with_return_value_stub
 
-
+# ---------------------------------------------------------------------------- #
+#                                Results Spider                                #
+# ---------------------------------------------------------------------------- #
 
 class ResultsSpider(Spider):
     name = 'results-spider'
 
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    if not os.path.exists(f'scraps/{timestamp}'):
+        os.mkdir(f'scraps/{timestamp}')
+
     custom_settings = {
-        'FEED_URI': f'scraps/scrap_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv',
-        'FEED_FORMAT': 'csv',
+        'LOG_FILE': f'scraps/{timestamp}/spider.log',
+        'FEEDS': {
+            f'scraps/{timestamp}/scrap.csv': {
+                'format': 'csv',
+            },
+        },
     }
 
     def __init__(self, query, progress_bar=None):
