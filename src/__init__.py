@@ -21,8 +21,6 @@ else:
 if os.path.exists("ScrapeyDoo.log"):
     os.remove("ScrapeyDoo.log")
 if not os.path.isdir("scraps"):
-    if os.path.exists("scraps"):
-        os.remove("scraps")
     os.mkdir("scraps")
 
 # ------------------------------- Kill Process ------------------------------- #

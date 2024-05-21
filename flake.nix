@@ -23,7 +23,6 @@
       {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            act
             poetry
             python3Full
           ];
