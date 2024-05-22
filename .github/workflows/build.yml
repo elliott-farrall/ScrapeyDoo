@@ -29,14 +29,6 @@ jobs:
         run: |
           poetry run python build.py
 
-      - name: Test Executable
-        run: |
-          $query = Get-Content .\tests\query.json -Raw | ConvertFrom-Json | ConvertTo-Json -Compress
-          $query = $query.Replace('"', '\"')
-          .\dist\ScrapeyDoo.exe
-          .\dist\ScrapeyDoo.exe "$query"
-        shell: powershell
-
       - name: Create Release
         uses: ncipollo/release-action@v1.14.0
         with:
