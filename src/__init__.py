@@ -11,7 +11,7 @@ import psutil  # type: ignore
 from scrapy.crawler import CrawlerProcess  # type: ignore
 from scrapy.utils.project import get_project_settings  # type: ignore
 
-from src.settings import APP_DIR, PLATFORM
+from src.settings import PLATFORM, resource_path
 from src.spiders.results_spider import ResultsSpider
 
 
@@ -204,7 +204,7 @@ class App(tk.Tk):
 
         self.title("ScrapeyDoo")
         if PLATFORM == "win32":
-            self.iconbitmap(os.path.join(APP_DIR, "assets/ScrapeyDoo.ico"))
+            self.iconbitmap(resource_path("assets/ScrapeyDoo.ico"))
         self.style = ttk.Style()
         self.style.theme_use("clam")
 
@@ -271,7 +271,7 @@ class Scraper(tk.Tk):
 
         self.title("ScrapeyDoo")
         if PLATFORM == "win32":
-            self.iconbitmap(os.path.join(APP_DIR, "assets/ScrapeyDoo.ico"))
+            self.iconbitmap(resource_path("assets/ScrapeyDoo.ico"))
         self.style = ttk.Style()
         self.style.theme_use("clam")
 
@@ -302,7 +302,6 @@ class Progress(tk.Text):
         self.master.update()
 
 def run():
-    os.chdir(APP_DIR)
     if os.path.exists("CRASH.dump"):
         os.remove("CRASH.dump")
     if os.path.exists("ScrapeyDoo.log"):
