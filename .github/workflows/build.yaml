@@ -38,7 +38,7 @@ jobs:
           --additional-hooks-dir src/hooks
           --hidden-import settings
           --add-data src/resources:resources
-          --no-confirm
+          --noconfirm
           src/__init__.py
 
       - name: Create Release

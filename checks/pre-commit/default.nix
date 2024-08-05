@@ -40,7 +40,6 @@ lib.pre-commit-hooks.${system}.run {
     /* ----------------------------------- Git ---------------------------------- */
 
     convco.enable = true;
-    no-commit-to-branch.enable = false;
 
     check-added-large-files.enable = true;
     check-vcs-permalinks.enable = true;
