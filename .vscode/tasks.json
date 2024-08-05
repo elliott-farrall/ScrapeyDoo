@@ -7,24 +7,14 @@
     },
     "tasks": [
         {
-            "label": "Compile App",
+            "label": "Run App",
             "type": "shell",
-            "command": "nix develop --command bash -c 'poetry run python build.py'",
+            "command": "poetry run ScrapeyDoo",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
-        },
-        {
-            "label": "Install Module from Selection",
-            "type": "shell",
-            "command": "nix develop --command bash -c  'poetry add ${selectedText}'"
-        },
-        {
-            "label": "Uninstall Module from Selection",
-            "type": "shell",
-            "command": "nix develop --command bash -c 'poetry remove ${selectedText}'"
         }
     ]
 }

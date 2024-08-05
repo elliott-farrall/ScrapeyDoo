@@ -1,46 +1,18 @@
-import tkinter as tk
-from tkinter import ttk
-
 import atexit
-import psutil
+import json
 import os
 import sys
-import json
-
+import tkinter as tk
 from subprocess import Popen
+from tkinter import ttk
 
-# ---------------------------------------------------------------------------- #
-#                                     Setup                                    #
-# ---------------------------------------------------------------------------- #
+import psutil  # type: ignore
+from scrapy.crawler import CrawlerProcess  # type: ignore
+from scrapy.utils.project import get_project_settings  # type: ignore
 
-if getattr(sys, 'frozen', False):
-    app_dir = sys._MEIPASS
-else:
-    app_dir = os.path.dirname(os.path.abspath(__file__))
+from src.settings import APP_DIR, PLATFORM
+from src.spiders.results_spider import ResultsSpider
 
-if os.path.exists("ScrapeyDoo.log"):
-    os.remove("ScrapeyDoo.log")
-if not os.path.isdir("scraps"):
-    os.mkdir("scraps")
-
-# ------------------------------- Kill Process ------------------------------- #
-
-def kill(subprocess):
-    try:
-        process = psutil.Process(subprocess.pid)
-        for proc in process.children(recursive=True):
-            proc.kill()
-        process.kill()
-    except psutil.NoSuchProcess:
-        pass
-
-# ---------------------------------------------------------------------------- #
-#                                     Main                                     #
-# ---------------------------------------------------------------------------- #
-
-from scrapy.crawler import CrawlerProcess
-from scrapy.utils.project import get_project_settings
-from spiders.results_spider import ResultsSpider
 
 class App(tk.Tk):
     def __init__(self):
@@ -230,37 +202,47 @@ class App(tk.Tk):
         # ------------------------------ Window Settings ----------------------------- #
 
         self.title("ScrapeyDoo")
-        self.iconbitmap(os.path.join(app_dir, "assets/ScrapeyDoo.ico"))
+        if PLATFORM == "win32":
+            self.iconbitmap(os.path.join(APP_DIR, "assets/ScrapeyDoo.ico"))
         self.style = ttk.Style()
-        self.style.theme_use('clam')
+        self.style.theme_use("clam")
 
         self.geometry("")
         self.resizable(False, False)
 
     def scrape(self):
         query = {
-            'field-keywords': self.keywords_entry.get(),
-            'field-author': self.author_entry.get(),
-            'field-title': self.title_entry.get(),
-            'field-isbn': self.isbns_entry.get(),
-            'field-publisher': self.publisher_entry.get(),
-            'node': self.subject_entry.get(),
-            'field-binding_browse-bin': self.format_entry.get(),
-            'field-subject': self.reader_age_entry.get(),
-            'emi': self.seller_entry.get(),
-            'p_46': self.pub_date_entry.get(),
-            'p_45': self.month_entry.get(),
-            'p_47': self.year_entry.get(),
-            'sort': self.sort_results_by_entry.get(),
+            "field-keywords": self.keywords_entry.get(),
+            "field-author": self.author_entry.get(),
+            "field-title": self.title_entry.get(),
+            "field-isbn": self.isbns_entry.get(),
+            "field-publisher": self.publisher_entry.get(),
+            "node": self.subject_entry.get(),
+            "field-binding_browse-bin": self.format_entry.get(),
+            "field-subject": self.reader_age_entry.get(),
+            "emi": self.seller_entry.get(),
+            "p_46": self.pub_date_entry.get(),
+            "p_45": self.month_entry.get(),
+            "p_47": self.year_entry.get(),
+            "sort": self.sort_results_by_entry.get(),
         }
-        if getattr(sys, 'frozen', False):
+        if getattr(sys, "frozen", False):
             self.scrapes.append(Popen([sys.executable, json.dumps(query)]))
         else:
             self.scrapes.append(Popen([sys.executable, __file__, json.dumps(query)]))
 
+    def kill(self, subprocess):
+        try:
+            process = psutil.Process(subprocess.pid)
+            for proc in process.children(recursive=True):
+                proc.kill()
+            process.kill()
+        except psutil.NoSuchProcess:
+            pass
+
     def exit(self):
         for scrape in self.scrapes:
-            kill(scrape)
+            self.kill(scrape)
         os._exit(0)
 
 class Scraper(tk.Tk):
@@ -272,7 +254,7 @@ class Scraper(tk.Tk):
         self.protocol("WM_DELETE_WINDOW", self.exit)
         atexit.register(self.exit)
 
-        os.environ.setdefault('SCRAPY_SETTINGS_MODULE', 'settings')
+        os.environ.setdefault("SCRAPY_SETTINGS_MODULE", "settings")
         self.process = CrawlerProcess(get_project_settings())
         self.process.crawl(ResultsSpider, query=query, progress_bar=self.progress_bar)
         self.process.start()
@@ -280,16 +262,17 @@ class Scraper(tk.Tk):
         self.destroy()
 
     def draw(self):
-        self.progress_bar = Progress(self, colour='green')
+        self.progress_bar = Progress(self, colour="green")
         self.progress_bar.grid(row=0, column=0)
 
         self.cancel_button = ttk.Button(text="Cancel", command=self.exit)
         self.cancel_button.grid(row=1, column=0)
 
         self.title("ScrapeyDoo")
-        self.iconbitmap(os.path.join(app_dir, "assets/ScrapeyDoo.ico"))
+        if PLATFORM == "win32":
+            self.iconbitmap(os.path.join(APP_DIR, "assets/ScrapeyDoo.ico"))
         self.style = ttk.Style()
-        self.style.theme_use('clam')
+        self.style.theme_use("clam")
 
         self.geometry("")
         self.resizable(False, False)
@@ -298,30 +281,31 @@ class Scraper(tk.Tk):
         os._exit(0)
 
 class Progress(tk.Text):
-    def __init__(self, master=None, colour='green'):
+    def __init__(self, master=None, colour="green"):
         if master is not None:
-            super().__init__(master, state='disabled', height=1)
+            super().__init__(master, state="disabled", height=1)
         else:
-            super().__init__(state='disabled', height=1)
-        self.tag_config('highlight', background=colour)
+            super().__init__(state="disabled", height=1)
+        self.tag_config("highlight", background=colour)
 
     def update(self, value=None, text=None):
-        self.config(state='normal')
+        self.config(state="normal")
 
-        self.delete('1.0', tk.END)
+        self.delete("1.0", tk.END)
         if text is not None:
             self.insert(tk.END, f"{text : ^{self['width']}}")
         if value is not None:
-            self.tag_add('highlight', '1.0', f"1.{int(value * self['width'])}")
+            self.tag_add("highlight", "1.0", f"1.{int(value * self['width'])}")
 
-        self.config(state='disabled')
+        self.config(state="disabled")
         self.master.update()
 
-# ---------------------------------------------------------------------------- #
-#                                     Init                                     #
-# ---------------------------------------------------------------------------- #
+def run():
+    if os.path.exists("ScrapeyDoo.log"):
+        os.remove("ScrapeyDoo.log")
+    if not os.path.isdir("scraps"):
+        os.mkdir("scraps")
 
-if __name__ == "__main__":
     if len(sys.argv) == 1:
         app = App()
         app.mainloop()
@@ -331,3 +315,5 @@ if __name__ == "__main__":
         scraper = Scraper(query)
         scraper.mainloop()
 
+if __name__ == "__main__":
+    run()

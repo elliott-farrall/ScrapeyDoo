@@ -1,0 +1,48 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+defaults:
+  run:
+    shell: bash
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: packetcoders/action-setup-cache-python-poetry@v1.2.0
+        with:
+          python-version: 3.9
+          poetry-version: 1.7.1
+
+      - name: Build Executable
+        run: >
+          poetry run pyinstaller
+          --onefile
+          --windowed
+          --argv-emulation
+          --name ScrapeyDoo
+          --icon src/assets/ScrapeyDoo.ico
+          --add-data src/assets;assets
+          --paths src
+          --additional-hooks-dir src/hooks
+          --hidden-import settings
+          --add-data src/resources;resources
+          --no-confirm
+          src/__init__.py
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          artifacts: "dist/*"
