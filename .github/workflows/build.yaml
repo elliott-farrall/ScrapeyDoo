@@ -15,7 +15,6 @@ jobs:
   build-windows:
     runs-on: windows-latest
 
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -24,7 +23,7 @@ jobs:
         uses: packetcoders/action-setup-cache-python-poetry@v1.2.0
         with:
           python-version: "3.9"
-          poetry-version: "1.7.1"
+          poetry-version: "1.8.3"
 
       - name: Build Executable
         run: >
