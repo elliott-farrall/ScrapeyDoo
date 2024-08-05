@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 defaults:
   run:
@@ -23,8 +23,8 @@ jobs:
       - name: Setup Environment
         uses: packetcoders/action-setup-cache-python-poetry@v1.2.0
         with:
-          python-version: 3.9
-          poetry-version: 1.7.1
+          python-version: "3.9"
+          poetry-version: "1.7.1"
 
       - name: Build Executable
         run: >
