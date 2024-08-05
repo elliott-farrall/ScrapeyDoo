@@ -5,7 +5,7 @@ FROZEN = getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS")
 PLATFORM = sys.platform
 
 if FROZEN:
-    APP_DIR = sys._MEIPASS # type: ignore
+    APP_DIR = os.path.dirname(sys.argv[0])
 else:
     APP_DIR = os.path.dirname(os.path.abspath(__file__))
 

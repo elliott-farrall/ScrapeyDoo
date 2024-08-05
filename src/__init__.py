@@ -2,9 +2,9 @@ import atexit
 import json
 import os
 import sys
+import tkinter as tk
 import traceback
 from subprocess import Popen
-import tkinter as tk
 from tkinter import ttk
 
 import psutil  # type: ignore
@@ -302,6 +302,7 @@ class Progress(tk.Text):
         self.master.update()
 
 def run():
+    os.chdir(APP_DIR)
     if os.path.exists("ScrapeyDoo.log"):
         os.remove("ScrapeyDoo.log")
     if not os.path.isdir("scraps"):
