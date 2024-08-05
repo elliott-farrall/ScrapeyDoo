@@ -15,7 +15,7 @@ scrapy-proxies = "^0.4"
 psutil = "^5.9.8"
 
 [tool.poetry.group.dev.dependencies]
-pyinstaller = "^6.6.0"
+pyinstaller = "^6.9.0"
 
 [tool.poetry.scripts]
 ScrapeyDoo = "src:run"
