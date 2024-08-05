@@ -2,8 +2,9 @@ import atexit
 import json
 import os
 import sys
-import tkinter as tk
+import traceback
 from subprocess import Popen
+import tkinter as tk
 from tkinter import ttk
 
 import psutil  # type: ignore
@@ -306,14 +307,20 @@ def run():
     if not os.path.isdir("scraps"):
         os.mkdir("scraps")
 
-    if len(sys.argv) == 1:
-        app = App()
-        app.mainloop()
-    else:
-        query = json.loads(sys.argv[1])
+    try:
+        if len(sys.argv) == 1:
+            app = App()
+            app.mainloop()
+        else:
+            query = json.loads(sys.argv[1])
 
-        scraper = Scraper(query)
-        scraper.mainloop()
+            scraper = Scraper(query)
+            scraper.mainloop()
+    except Exception:
+        with open("CRASH.dump", "w") as crash_dump:
+            crash_dump.write(traceback.format_exc())
+        print("An error occurred. Details have been written to CRASH.dump.")
+        sys.exit(1)
 
 if __name__ == "__main__":
     run()

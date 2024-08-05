@@ -41,6 +41,15 @@ jobs:
           --noconfirm
           src/__init__.py
 
+      - name: Test Executable
+        run: |
+          ./dist/ScrapeyDoo.exe &
+          sleep 10
+          if [ -f ./dist/CRASH.dump ]; then
+            cat ./dist/CRASH.dump
+            exit 1
+          fi
+
       - name: Create Release
         uses: ncipollo/release-action@v1.14.0
         with:
