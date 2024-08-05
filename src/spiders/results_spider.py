@@ -18,7 +18,7 @@ class ResultsSpider(Spider):
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     if not os.path.exists(f"scraps/{timestamp}"):
-        os.mkdir(f"scraps/{timestamp}")
+        os.makedirs(f"scraps/{timestamp}")
 
     custom_settings = {
         "LOG_FILE": f"scraps/{timestamp}/spider.log",

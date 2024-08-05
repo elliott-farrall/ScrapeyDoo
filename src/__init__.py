@@ -303,6 +303,8 @@ class Progress(tk.Text):
 
 def run():
     os.chdir(APP_DIR)
+    if os.path.exists("CRASH.dump"):
+        os.remove("CRASH.dump")
     if os.path.exists("ScrapeyDoo.log"):
         os.remove("ScrapeyDoo.log")
     if not os.path.isdir("scraps"):
