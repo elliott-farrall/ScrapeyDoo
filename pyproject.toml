@@ -12,7 +12,7 @@ python = ">=3.9,<3.13"
 scrapy = "^2.11.2"
 scrapy-user-agents = "^0.1.1"
 scrapy-proxies = "^0.4"
-psutil = "^6.0.0"
+psutil = "^6.1.0"
 
 [tool.poetry.group.dev.dependencies]
 pyinstaller = "^6.10.0"
